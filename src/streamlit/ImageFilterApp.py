@@ -30,13 +30,11 @@ class ImageFilterApp():
                 if option != 'None':
                     st.header('Output image')
                     st.image(filtered_img, channels=colour)
-                    # fromarray convert cv2 image into PIL format for saving it using download link.
                     if colour == 'BGR':
                         result = Image.fromarray(filtered_img[:,:,::-1])
                     else:
                         result = Image.fromarray(filtered_img)
-                    # Display link.
-                    st.markdown(self.__getDownloadLink(result,'output.png','Download '+'Output'),
+                    st.markdown(self.__getDownloadLink(result,'output.jpeg'),
                                 unsafe_allow_html=True)
     
     def __toOpenCV(self, src):
@@ -45,11 +43,11 @@ class ImageFilterApp():
 
         return dst
     
-    def __getDownloadLink(self, img, filename, text):
+    def __getDownloadLink(self, img, filename):
         buffered = io.BytesIO()
         img.save(buffered, format = 'JPEG')
         img_str = base64.b64encode(buffered.getvalue()).decode()
-        href = f'<a href="data:file/txt;base64,{img_str}" download="{filename}">{text}</a>'
+        href = f'<a href="data:file/txt;base64,{img_str}" download="{filename}">Download output</a>'
         return href
     
     def __generateSelection(self, option, img):
