@@ -17,7 +17,7 @@ Once all dependencies have been installed, run the program contained in the 'src
 As expected, you'll be asked to enter the input image path.
 After that, a new window will pop up showing the result of applying each filter available. Just choose which one you'd like to save.
 
-![alt text](https://github.com/Josgonmar/Simple-image-filters/blob/master/visuals/interface.jpg?raw=false)
+![alt text](https://github.com/Josgonmar/Simple-image-filters/blob/master/visuals/interface.jpg?raw=true)
 
 *Note that the selected images are remarked with a red rectangle. Select or deselect using the mouse click.*
 
