@@ -9,15 +9,15 @@ Please be aware that some of the results may differ depending on the input image
 * [Streamlit](https://docs.streamlit.io/library/get-started) - 1.10.0 (Only required to run the streamlit app version)
 
 ## How to use:
-Once all dependencies have been installed, run the program contained in the 'src' folder with:
+Once all dependencies have been installed, not before having placed the original image inside the */visuals* folder, run the program contained in the 'src' folder with:
 
 ```console
     $ python ImageFilter.py
 ```
-As expected, you'll be asked to enter the input image path.
+
 After that, a new window will pop up showing the result of applying each filter available. Just choose which one you'd like to save and close the window.
 
-![alt text](https://github.com/Josgonmar/Simple-image-filters/blob/master/visuals/interface.jpg?raw=true)
+![alt text](https://github.com/Josgonmar/Simple-image-filters/blob/master/docs/interface.jpg?raw=true)
 
 *Note that the selected images are remarked with a red rectangle. Select or deselect using the mouse click.*
 

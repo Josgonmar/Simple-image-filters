@@ -1,65 +1,73 @@
 import pathlib
+import os
 import numpy as np
 import cv2
 
 
 class ImageFilter:
-    __image_path = None
-    __input_image = None
+    __paths  = []
+    __input_images = []
     __window_name = "Select which filter(s) you would like to apply"
     __sepia = False
     __vignette = False
     __bw = False
     __pskt = False
 
-    def __init__(self, image_path):
-        self.__image_path = image_path
-        self.__input_image = cv2.imread(self.__image_path, cv2.IMREAD_COLOR)
+    def __init__(self):
+        self.__loadImage()
     
     def run(self):
         try:
-            downsized_img = cv2.resize(self.__input_image,None,fx=0.8,fy=0.8) #Downsized copy of the images just to show the results
-            downsized_sepia = self.__sepiaFilter(downsized_img)
-            downsized_vignette = self.__vignetteFilter(downsized_img)
-            downsized_black_and_white = self.__blackAndWhiteFilter(downsized_img)
-            downsized_pencil_sketch = self.__pencilSketchFilter(downsized_img)
+            for idx in range(0, len(self.__input_images)):
+                downsized_img = cv2.resize(self.__input_images[idx],None,fx=0.8,fy=0.8) #Downsized copy of the images just to show the results
+                downsized_sepia = self.__sepiaFilter(downsized_img)
+                downsized_vignette = self.__vignetteFilter(downsized_img)
+                downsized_black_and_white = self.__blackAndWhiteFilter(downsized_img)
+                downsized_pencil_sketch = self.__pencilSketchFilter(downsized_img)
 
-            upper_filters = cv2.hconcat([downsized_sepia, downsized_vignette])
-            bottom_filters = cv2.hconcat([downsized_black_and_white, downsized_pencil_sketch])
-            select_window = cv2.vconcat([upper_filters, bottom_filters])
+                upper_filters = cv2.hconcat([downsized_sepia, downsized_vignette])
+                bottom_filters = cv2.hconcat([downsized_black_and_white, downsized_pencil_sketch])
+                select_window = cv2.vconcat([upper_filters, bottom_filters])
 
-            print("[INFO] Close the window to proceed with your selection...")
+                print("[INFO] Close the window to proceed with your selection...")
 
-            cv2.imshow(self.__window_name, select_window)
-            cv2.setMouseCallback(self.__window_name, self.__mouseHandlerCallback, select_window.copy())
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+                cv2.imshow(self.__window_name, select_window)
+                cv2.setMouseCallback(self.__window_name, self.__mouseHandlerCallback, select_window.copy())
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
 
-            print("[INFO] Correctly executed program. Saving and finishing...")
-
-            self.__applyAndSave()
+                self.__applyAndSave(self.__input_images[idx], self.__paths[idx])
+                self.__reset()
         except:
             print('[ERROR] An error occurred. Finishing execution.')
+
+        print("[INFO] Correctly executed program. Finishing...")
     
-    def __applyAndSave(self):
+    def __reset(self):
+        self.__sepia = False
+        self.__vignette = False
+        self.__bw = False
+        self.__pskt = False
+
+    def __applyAndSave(self, img, path):
         if self.__sepia:
-            full_img_sepia = self.__sepiaFilter(self.__input_image)
-            sepia_path = str(pathlib.Path(self.__image_path).with_suffix('')) + '-sepia.jpg'
+            full_img_sepia = self.__sepiaFilter(img)
+            sepia_path = str(pathlib.Path(path).with_suffix('')) + '-sepia.jpg'
             cv2.imwrite(sepia_path, full_img_sepia)
             print("Saved", sepia_path)
         if self.__bw:
-            full_img_bw = self.__blackAndWhiteFilter(self.__input_image)
-            bw_path = str(pathlib.Path(self.__image_path).with_suffix('')) + '-bw.jpg'
+            full_img_bw = self.__blackAndWhiteFilter(img)
+            bw_path = str(pathlib.Path(path).with_suffix('')) + '-bw.jpg'
             cv2.imwrite(bw_path, full_img_bw)
             print("Saved", bw_path)
         if self.__vignette:
-            full_img_vignette = self.__vignetteFilter(self.__input_image)
-            vignette_path = str(pathlib.Path(self.__image_path).with_suffix('')) + '-vignette.jpg'
+            full_img_vignette = self.__vignetteFilter(img)
+            vignette_path = str(pathlib.Path(path).with_suffix('')) + '-vignette.jpg'
             cv2.imwrite(vignette_path, full_img_vignette)
             print("Saved", vignette_path)
         if self.__pskt:
-            full_img_pskt = self.__pencilSketchFilter(self.__input_image)
-            pskt_path = str(pathlib.Path(self.__image_path).with_suffix('')) + '-pskt.jpg'
+            full_img_pskt = self.__pencilSketchFilter(img)
+            pskt_path = str(pathlib.Path(path).with_suffix('')) + '-pskt.jpg'
             cv2.imwrite(pskt_path, full_img_pskt)
             print("Saved", pskt_path)
     
@@ -156,8 +164,17 @@ class ImageFilter:
 
         return after_selection_img
 
+    def __loadImage(self):
+        try:
+            for file in os.listdir('../visuals'):
+                self.__paths.append(file)
+                self.__input_images.append(cv2.imread('../visuals/' + file, cv2.IMREAD_COLOR))
+            print('[INFO] Loaded image(s)')
+        except:
+            print('[ERROR] An error occured while reading the image(s)')
+
 
 
 if __name__ == "__main__":
-    imageFilter_obj = ImageFilter(input("Enter the image path: "))
+    imageFilter_obj = ImageFilter()
     imageFilter_obj.run()
