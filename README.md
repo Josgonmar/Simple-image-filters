@@ -32,4 +32,4 @@ To run the Streamlit app locally, just go to the folder where `ImageFilterApp.py
 A new window will be opened in your favourite web browser where you can perform the exact same thing as in the python program, but in a much more user-friendly way!
 
 ## License:
-Feel free to use this program however you like!
+Feel free to use this program whatever you like!
